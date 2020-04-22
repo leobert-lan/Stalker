@@ -1,0 +1,50 @@
+[
+    {
+       "point":"真实点号"，
+       "key":"unique key",
+       "data":[
+            {
+                "p":"n.property",
+                "n":"name"
+            },
+            ...
+       ]，
+       "group":"如果有必要的话，按照Activity分组可以减少寻找策略时的时间复杂度"
+    },
+    ...
+]
+
+data class PointDataConfig(val p:String,val n:String)
+
+class DataHandler(val n:Int) {
+
+
+    fun handle(obj:Any,config:PointDataConfig) {
+
+    }
+}
+
+//放置数据优于获取策略后再从bean中取数据
+
+触发埋点后，
+各层级都将自身已经标记的数据放置到层数据中，然后获取到策略后进行：从map中的获取、转名字
+
+class Foo{
+    val a:Int
+    val b:String
+    val bar:Bar
+}
+
+a,b 简单类型，直接取pn
+
+bar object，先去pn，然后处理透传
+
+//参考方法原型
+fun handle(pn:String,obj:Any)
+
+e.g.
+
+handle("foo",this.foo)
+//a
+//b
+handle("foo"+"."+"bar",bar)
