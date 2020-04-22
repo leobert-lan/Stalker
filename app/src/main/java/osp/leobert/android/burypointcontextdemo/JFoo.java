@@ -1,7 +1,7 @@
 package osp.leobert.android.burypointcontextdemo;
 
-import osp.leobert.android.burypoint.notation.PdInherit;
-import osp.leobert.android.burypoint.notation.PointData;
+import osp.leobert.android.tracker.notation.PdInherit;
+import osp.leobert.android.tracker.notation.PointData;
 
 /**
  * <p><b>Package:</b> osp.leobert.android.burypointcontextdemo </p>

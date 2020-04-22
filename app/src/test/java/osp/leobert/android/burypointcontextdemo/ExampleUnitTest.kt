@@ -2,9 +2,7 @@ package osp.leobert.android.burypointcontextdemo
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import osp.leobert.android.burypoint.DataHandler
-import osp.leobert.android.burypoint.DataRepoChunk
-import osp.leobert.android.burypoint.notation.PointData
+import osp.leobert.android.tracker.notation.PointData
 
 /**
  * Example local unit test, which will execute on the development machine (host).

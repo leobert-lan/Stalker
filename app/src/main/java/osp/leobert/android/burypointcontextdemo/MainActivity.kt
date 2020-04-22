@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import osp.leobert.android.burypoint.DataHandler
-import osp.leobert.android.burypoint.DataRepoChunk
-import osp.leobert.android.burypoint.model.VisitCard
-import osp.leobert.android.burypoint.notation.PointData
-import osp.leobert.android.burypoint.type.Type
+import osp.leobert.android.tracker.DataHandler
+import osp.leobert.android.tracker.DataRepoChunk
+import osp.leobert.android.tracker.model.VisitCard
+import osp.leobert.android.tracker.notation.PointData
+import osp.leobert.android.tracker.type.Type
 
 class MainActivity : AppCompatActivity() {
 
