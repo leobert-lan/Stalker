@@ -15,6 +15,18 @@ class DataRepoChunk {
     companion object {
         val onUsing: Queue<DataRepoChunk> = LinkedList<DataRepoChunk>()
         val unoccupied: Queue<DataRepoChunk> = ArrayDeque<DataRepoChunk>()
+
+        fun obtain(): DataRepoChunk {
+            return (unoccupied.takeIf { it.isNotEmpty() }?.poll() ?: DataRepoChunk()).apply {
+                onUsing.add(this)
+            }
+        }
+
+        fun gc(element: DataRepoChunk) {
+            element.clear()
+            onUsing.remove(element)
+            unoccupied.takeIf { it.size < 10 }?.add(element)
+        }
     }
 
     val repo: MutableMap<String, in Any> = hashMapOf()
@@ -29,6 +41,6 @@ class DataRepoChunk {
         repo.clear()
     }
 
-    fun debugRepo():String  = Gson().toJson(repo)
+    fun debugRepo(): String = Gson().toJson(repo)
 
 }

@@ -27,8 +27,10 @@ public abstract class BuryPoint {
         return new TransferBuryPoint(key);
     }
 
+    protected DataRepoChunk dataRepoChunk = DataRepoChunk.Companion.obtain();
+
     @NonNull
-    private String key;
+    protected String key;
 
     @NonNull
     public String getKey() {
@@ -39,35 +41,9 @@ public abstract class BuryPoint {
         this.key = key;
     }
 
-    void handle(@NonNull BuryPointContext context, Pair<String, String>[] appendData) {
-        if (appendData != null) {
-            handle(context, Arrays.asList(appendData));
-        } else {
-            handle(context, (List<Pair<String, String>>) null);
-        }
-    }
+    abstract void handle(@NonNull BuryPointContext context, Pair<String, String>[] appendData);
 
-    void handle(@NonNull BuryPointContext context, List<Pair<String, String>> appendData) {
-
-        List<Pair<String, String>> contextData = context.createContextData(key);
-
-        List<Pair<String, String>> tmp = new ArrayList<>();
-
-        if (appendData != null)
-            tmp.addAll(appendData);
-
-        if (contextData != null)
-            tmp.addAll(contextData);
-        //去重
-        Set<Pair<String, String>> tmp2 = new LinkedHashSet<>(tmp);
-        tmp.clear();
-        tmp.addAll(tmp2);
-
-        if (tmp.isEmpty())
-            context.uploadPoint(key, null);
-        else
-            context.uploadPoint(key, tmp);
-    }
+    abstract void handle(@NonNull BuryPointContext context, List<Pair<String, String>> appendData);
 
     void allocate(@NonNull BuryPointContext context, @NonNull List<Pair<String, String>> appendData) {
 
@@ -112,6 +88,39 @@ public abstract class BuryPoint {
         NormalBuryPoint(@NonNull String key) {
             super(key);
         }
+
+        @Override
+        void handle(@NonNull BuryPointContext context, Pair<String, String>[] appendData) {
+            if (appendData != null) {
+                handle(context, Arrays.asList(appendData));
+            } else {
+                handle(context, (List<Pair<String, String>>) null);
+            }
+        }
+
+        @Override
+        void handle(@NonNull BuryPointContext context, List<Pair<String, String>> appendData) {
+
+            List<Pair<String, String>> contextData = context.createContextData(key);
+
+            List<Pair<String, String>> tmp = new ArrayList<>();
+
+            if (appendData != null)
+                tmp.addAll(appendData);
+
+            if (contextData != null)
+                tmp.addAll(contextData);
+            //去重
+            Set<Pair<String, String>> tmp2 = new LinkedHashSet<>(tmp);
+            tmp.clear();
+            tmp.addAll(tmp2);
+
+            if (tmp.isEmpty())
+                context.uploadPoint(key, null);
+            else
+                context.uploadPoint(key, tmp);
+        }
+
     }
 
     /**
@@ -134,6 +143,7 @@ public abstract class BuryPoint {
             }
         }
 
+        @Override
         void handle(@NonNull BuryPointContext context, List<Pair<String, String>> appendData) {
             Set<BuryPoint> tmp = context.transferByKey(getKey());
             if (tmp == null)
@@ -144,23 +154,18 @@ public abstract class BuryPoint {
                 point.handle(context, appendData);
             }
         }
+    }
 
-//        @Override
-//        void allocate(@NonNull BuryPointContext context, @NonNull List<Pair<String, String>> appendData) {
-//            super.allocate(context, appendData);
+//    /**
+//     * 可派生的点，慎用，目前我能想到的场景都可以使用TransferBuryPoint 构建出多个NormalBuryPoint处理
+//     * //     * @hide
+//     */
+//    private static class FissileBuryPoint extends BuryPoint {
+//
+//        public FissileBuryPoint(@NonNull String key) {
+//            super(key);
 //        }
-    }
-
-    /**
-     * 可派生的点，慎用，目前我能想到的场景都可以使用TransferBuryPoint 构建出多个NormalBuryPoint处理
-     * //     * @hide
-     */
-    private static class FissileBuryPoint extends BuryPoint {
-
-        public FissileBuryPoint(@NonNull String key) {
-            super(key);
-        }
-    }
+//    }
     //endregion subclass
 
 }

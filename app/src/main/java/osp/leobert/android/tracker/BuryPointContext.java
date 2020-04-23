@@ -5,7 +5,6 @@ import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,20 +18,21 @@ import java.util.Set;
  * <p><b>Description:</b> 埋点上下文环境,核心发起者 </p>
  * Created by leobert on 2018/12/18.
  */
-public abstract class BuryPointContext {
+/*public*/
+abstract class BuryPointContext {
     public static final String LOG_TAG = "track_msg";
-    public static final BuryPointContext NO_OP = new BuryPointContext() {
-        @Override
-        public boolean allowWrapper(@NonNull BuryPointContextWrapper wrapper) {
-            return false;
-        }
-
-        @Nullable
-        @Override
-        public List<Pair<String, String>> createContextData(String pointKey) {
-            return null;
-        }
-    };
+//    public static final BuryPointContext NO_OP = new BuryPointContext() {
+//        @Override
+//        public boolean allowWrapper(@NonNull BuryPointContextWrapper wrapper) {
+//            return false;
+//        }
+//
+//        @Nullable
+//        @Override
+//        public List<Pair<String, String>> createContextData(String pointKey) {
+//            return null;
+//        }
+//    };
 
     /**
      * 按照key收集上下文数据，<em>仅处理当前层</em>
@@ -144,6 +144,10 @@ public abstract class BuryPointContext {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    protected void injectChunkData(@NonNull DataRepoChunk dataRepoChunk) {
+        //inject the data of this chunk
     }
 
     void uploadPoint(String pointKey, List<Pair<String, String>> params) {
