@@ -4,7 +4,6 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -41,24 +40,11 @@ public abstract class BuryPoint {
     }
 
     void handle(@NonNull BuryPointContext context, Pair<String, String>[] appendData) {
-
-        List<Pair<String, String>> contextData = context.createContextData(key);
-
-        List<Pair<String, String>> tmp = new ArrayList<>();
-        if (appendData != null)
-            tmp.addAll(Arrays.asList(appendData));
-        if (contextData != null)
-            tmp.addAll(contextData);
-
-        //去重
-        Set<Pair<String, String>> tmp2 = new LinkedHashSet<>(tmp);
-        tmp.clear();
-        tmp.addAll(tmp2);
-
-        if (tmp.isEmpty())
-            context.uploadPoint(key, null);
-        else
-            context.uploadPoint(key, tmp);
+        if (appendData != null) {
+            handle(context, Arrays.asList(appendData));
+        } else {
+            handle(context, (List<Pair<String, String>>) null);
+        }
     }
 
     void handle(@NonNull BuryPointContext context, List<Pair<String, String>> appendData) {
@@ -94,6 +80,7 @@ public abstract class BuryPoint {
         appendData.addAll(tmp);
     }
 
+    //region equals&hash
 
     @Override
     public boolean equals(Object o) {
@@ -109,6 +96,14 @@ public abstract class BuryPoint {
     public int hashCode() {
         return key.hashCode();
     }
+    //endregion equals&hash
+
+///////////////////////////////////////////////////////////////////////////
+// subclass
+///////////////////////////////////////////////////////////////////////////
+
+    //region subclass
+
 
     /**
      * 普通点，不会派生其他点
@@ -150,10 +145,10 @@ public abstract class BuryPoint {
             }
         }
 
-        @Override
-        void allocate(@NonNull BuryPointContext context, @NonNull List<Pair<String, String>> appendData) {
-            super.allocate(context, appendData);
-        }
+//        @Override
+//        void allocate(@NonNull BuryPointContext context, @NonNull List<Pair<String, String>> appendData) {
+//            super.allocate(context, appendData);
+//        }
     }
 
     /**
@@ -166,5 +161,6 @@ public abstract class BuryPoint {
             super(key);
         }
     }
+    //endregion subclass
 
 }

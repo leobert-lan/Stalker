@@ -72,6 +72,7 @@ public abstract class BuryPointContext {
      * @return 上下文数据
      */
     @Nullable
+    @Deprecated
     public abstract List<Pair<String, String>> createContextData(String pointKey);
 
     public void track(String pointKey) {
